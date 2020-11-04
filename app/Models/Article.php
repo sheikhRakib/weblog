@@ -20,7 +20,12 @@ class Article extends Model
     public function author() {
         return $this->belongsTo('App\Models\User', 'user_id');
     }
-        
+
+    public function comments()
+    {
+        return $this->hasMany('App\Models\Comment', 'article_id');
+    }
+
     public function getLeadAttribute() {
         $data = Str::words($this->description, 30);
         $data = Strip_tags($data);
