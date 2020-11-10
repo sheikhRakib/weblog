@@ -12,6 +12,11 @@
     <link rel="stylesheet" href="{{ asset('plugins/fontawesome-free/css/all.min.css') }}">
     <!-- AdminLTE -->
     <link rel="stylesheet" href="{{ asset('plugins/adminlte/css/adminlte.min.css') }}">
+
+    <!-- jQuery -->
+    <script src="{{ asset('plugins/jquery/jquery.min.js') }}"></script>
+    <!-- Bootstrap 4 -->
+    <script src="{{ asset('plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
 </head>
 
 <body>
@@ -28,18 +33,7 @@
 
             <!-- Sidebar Column -->
             <div class="col-md-4">
-                <!-- Search Widget -->
-                <div class="card my-4">
-                    <h5 class="card-header">Search</h5>
-                    <div class="card-body">
-                        <div class="input-group">
-                            <input type="text" class="form-control" placeholder="Search for...">
-                            <span class="input-group-append">
-                                <button class="btn btn-secondary" type="button">Go!</button>
-                            </span>
-                        </div>
-                    </div>
-                </div>
+                <x-frontend.searchbar />
 
                 <!-- Categories Widget -->
                 <div class="card my-4">
@@ -93,14 +87,9 @@
     </div>
     <!-- /.Page Content -->
 
-
     <x-frontend.footer />
 
 
-    <!-- jQuery -->
-    <script src="{{ asset('plugins/jquery/jquery.min.js') }}"></script>
-    <!-- Bootstrap 4 -->
-    <script src="{{ asset('plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
     <!-- AdminLTE -->
     <script src="{{ asset('plugins/adminlte/js/adminlte.min.js') }}"></script>
 </body>

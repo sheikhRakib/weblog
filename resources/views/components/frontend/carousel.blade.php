@@ -10,7 +10,7 @@
     <div class="carousel-inner">
         @forelse ($featured as $item)
         <div class="carousel-item p-5 @if($loop->first) active @endif" style="background-color: #44AEEB; height:25rem">
-            <a class="d-block p-5 text-dark" href="#" target="_blank">
+            <a class="d-block p-5 text-dark" href="{{ route('weblog.show', $item->slug) }}" target="_blank">
                 <h4>{{ $item->title }}</h4>
                 <p>{{ $item->lead }}</p>
             </a>
