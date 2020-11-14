@@ -19,7 +19,7 @@
                 </li>
                 @else
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('profile.index') }}">Home</a>
+                    <a class="nav-link" href="{{ route('profile.index') }}">Profile</a>
                 </li>
                 @endguest
 
