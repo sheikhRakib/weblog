@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\FrontendController;
 use App\Http\Controllers\ProfileController;
@@ -8,41 +9,55 @@ use Illuminate\Support\Facades\Route;
 
 // Frontend Routes
 Route::get('/', [FrontendController::class, 'index'])->name('weblog.index');
-Route::get('/show/{slug}', [FrontendController::class, 'show'])->name('weblog.show');
+Route::get('/show/{article}', [FrontendController::class, 'show'])->name('weblog.show');
 Route::get('/query/{query}', [FrontendController::class, 'query'])->name('weblog.query');
 
 // Add Comments on Articles
 Route::post('/addcomment', [CommentController::class, 'store'])->name('weblog.comment');
 
 
-// Backend Routes
+/*
+* Backend Routes
+*/
+
+// Profile Section
 Route::group(['prefix'=>'profile', 'middleware'=>'auth', 'as'=>'profile.'], function () {
     Route::get('/', [ProfileController::class, 'index'])->name('index');
 
     // Profile edit section
     Route::group(['prefix' => 'edit', 'as'=>'edit.'], function () {
         Route::get('/', [ProfileEditController::class, 'index'])->name('index');
-        Route::get('/info', [ProfileEditController::class, 'info'])->name('info');
-        Route::get('/email', [ProfileEditController::class, 'email'])->name('email');
-        Route::get('/password', [ProfileEditController::class, 'password'])->name('password');
+        Route::get('/info', [ProfileEditController::class, 'showEditInfo'])->name('info');
+        Route::get('/email', [ProfileEditController::class, 'showEditEmail'])->name('email');
+        Route::get('/password', [ProfileEditController::class, 'showEditPassword'])->name('password');
 
-        Route::put('/info', [ProfileEditController::class, 'update_info'])->name('info.update');
-        Route::put('/email', [ProfileEditController::class, 'update_email'])->name('email.update');
-        Route::put('/password', [ProfileEditController::class, 'update_password'])->name('password.update');
+        Route::put('/info', [ProfileEditController::class, 'updateInfo'])->name('info.update');
+        Route::put('/email', [ProfileEditController::class, 'updateEmail'])->name('email.update');
+        Route::put('/password', [ProfileEditController::class, 'updatePassword'])->name('password.update');
     });
-
-    // Route::get('/info', [ProfileUpdateController::class, 'info'])->name('info');
-    // Route::get('/email', [ProfileUpdateController::class, 'email'])->name('email');
-    // Route::get('/password', [ProfileUpdateController::class, 'password'])->name('password');
-
-    // Route::put('/info', [ProfileUpdateController::class, 'info_update'])->name('info.update');
-    // Route::put('/email', [ProfileUpdateController::class, 'email_update'])->name('email.update');
-    // Route::put('/password', [ProfileUpdateController::class, 'password_update'])->name('password.update');    
 });
+
+// 
+Route::group(['prefix' => 'article', 'middleware'=>'auth', 'as'=>'article.'], function () {
+    Route::get('/drafted', [ArticleController::class, 'showDraftedArticles'])->name('drafted');
+    Route::get('/published', [ArticleController::class, 'showPublishedArticles'])->name('published');
+    
+    Route::get('/create', [ArticleController::class, 'create'])->name('create');
+    Route::post('/create', [ArticleController::class, 'store'])->name('store');
+    
+    Route::get('/edit/{article}', [ArticleController::class, 'edit'])->name('edit');
+    Route::put('/edit/{article}', [ArticleController::class, 'update'])->name('update');
+});
+
+
+
+
+
+
 
 
 
 // Undefined Routes
 Route::get('/{url}', function(){ 
-    return redirect()->route('weblog.index');
+    abort(404);
 });

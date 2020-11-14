@@ -17,6 +17,10 @@ class Article extends Model
         'is_published' => 'boolean'
     ];
 
+    public function getRouteKeyName() {
+        return 'slug';
+    }
+
     public function author() {
         return $this->belongsTo('App\Models\User', 'user_id');
     }
@@ -28,7 +32,7 @@ class Article extends Model
 
     public function getLeadAttribute() {
         $data = Str::words($this->description, 30);
-        $data = Strip_tags($data);
+        $data = preg_replace("/[^a-zA-Z0-9\s !@#$%^&*().]]/u", '', strip_tags(html_entity_decode($data)));
         return $data;
     }
     

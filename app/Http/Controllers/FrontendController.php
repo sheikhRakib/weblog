@@ -16,12 +16,9 @@ class FrontendController extends Controller
         return view('frontend.index', $data);
     }
 
-    public function show($slug)
+    public function show(Article $article)
     {
-        $data['article'] = Article::where('slug', $slug)->first();
-
-        abort_unless($data['article'], 404);
-        return view('frontend.show', $data);
+        return view('frontend.show', compact('article'));
     }
 
     public function query($query)

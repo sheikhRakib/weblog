@@ -13,7 +13,7 @@
     <hr>
 
     <!-- Post Content -->
-    <div class="text-justify px-3">{{ $article->description }}</div>
+    <div class="text-justify px-3">{!! $article->description !!}</div>
     <hr>
 
     <!-- Comments Form -->

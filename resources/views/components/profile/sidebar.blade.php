@@ -25,31 +25,23 @@
                     </a>
                     <ul class="nav nav-treeview bg-gray rounded">
                         <li class="nav-item">
-                            <a href="#" class="nav-link">
-                                <i class="nav-icon far fa-eye"></i>
-                                <p>All the Articles</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="#" class="nav-link">
+                            <a href="{{ Route('article.drafted') }}" class="nav-link">
                                 <i class="nav-icon far fa-copy"></i>
                                 <p>Drafted</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="#" class="nav-link">
+                            <a href="{{ Route('article.published') }}" class="nav-link">
                                 <i class="nav-icon far fa-flag"></i>
                                 <p>Published</p>
                             </a>
                         </li>
-                        @can('write article')
                         <li class="nav-item">
-                            <a href="#" class="nav-link">
+                            <a href="{{ Route('article.create') }}" class="nav-link">
                                 <i class="nav-icon far fa-plus-square"></i>
                                 <p>Create</p>
                             </a>
                         </li>  
-                        @endcan
                     </ul>
                 </li>
 
