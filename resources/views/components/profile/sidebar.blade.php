@@ -18,10 +18,7 @@
                 <li class="nav-item has-treeview">
                     <a href="#" class="nav-link">
                         <i class="nav-icon far fa-file-word"></i>
-                        <p>
-                            Article
-                            <i class="fas fa-angle-left right"></i>
-                        </p>
+                        <p>Article<i class="fas fa-angle-left right"></i></p>
                     </a>
                     <ul class="nav nav-treeview bg-gray rounded">
                         <li class="nav-item">
@@ -46,14 +43,27 @@
                 </li>
 
                 {{-- MailBox --}}
-                @can('read message')
                 <li class="nav-item">
                     <a href="#" class="nav-link">
                         <i class="nav-icon far fa-envelope"></i>
                         <p>MailBox</p>
                     </a>
                 </li>
-                @endcan
+
+                {{-- Roles and Permissions --}}
+                <li class="nav-item">
+                    <a href="{{ Route('rolesAndPermissions') }}" class="nav-link">
+                        <i class="nav-icon fas fa-terminal"></i>
+                        <p>Roles & Permissions</p>
+                    </a>
+                </li>
+
+
+
+
+
+
+
 
                 {{-- ------------------------------------- --}}
                 <li class="nav-header">Example</li>

@@ -77,4 +77,12 @@ class ArticleController extends Controller
         Session::flash('success', $message); 
         return redirect($url);
     }
+
+    public function destroy(Article $article)
+    {
+        $article->delete();
+        Session::flash('success', 'Article Deleted');
+
+        return redirect()->back();
+    }
 }

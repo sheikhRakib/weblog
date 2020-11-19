@@ -9,7 +9,6 @@
     </div>
     <div class="card-body p-0">
         <div class="table-responsive mailbox-messages">
-            @if(count($articles))
             <table class="table table-hover table-striped">
                 <thead>
                     <tr>
@@ -20,7 +19,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($articles as $article)
+                    @forelse ($articles as $article)
                     <tr>
                         <td class="mailbox-name">
                             <a href="{{ route('weblog.show', [$article->slug]) }}">
@@ -39,7 +38,7 @@
                                     href="#" onclick="event.preventDefault();
                          document.getElementById({{ $article->id }}).submit();"><i class="fas fa-trash"></i></a>
 
-                                <form id="{{ $article->id }}" action="#"
+                                <form id="{{ $article->id }}" action="{{ Route('article.destroy', $article->slug) }}"
                                     method="POST" style="display: none;">
                                     @csrf
                                     @method('DELETE')
@@ -47,12 +46,11 @@
                             </div>
                         </td>
                     </tr>
-                    @endforeach
+                    @empty
+                        <tr><td colspan="4">Nothing to show</td></tr>
+                    @endforelse
                 </tbody>
             </table>
-            @else
-            <p>No Messages</p>
-            @endif
         </div>
     </div>
 

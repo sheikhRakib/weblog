@@ -8,11 +8,6 @@ use Illuminate\Support\Facades\Hash;
 
 class DefaultUserSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     *
-     * @return void
-     */
     public function run()
     {
         $rakib = User::create([
@@ -24,5 +19,6 @@ class DefaultUserSeeder extends Seeder
             'location'  => 'Dhaka, BD', 
             'education' => 'AIUB',
         ]);
+        $rakib->assignRole("user");
     }
 }

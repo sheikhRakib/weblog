@@ -5,6 +5,7 @@ use App\Http\Controllers\CommentController;
 use App\Http\Controllers\FrontendController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProfileEditController;
+use App\Http\Controllers\RolesAndPermissionsController;
 use Illuminate\Support\Facades\Route;
 
 // Frontend Routes
@@ -37,7 +38,7 @@ Route::group(['prefix'=>'profile', 'middleware'=>'auth', 'as'=>'profile.'], func
     });
 });
 
-// 
+// Article Section
 Route::group(['prefix' => 'article', 'middleware'=>'auth', 'as'=>'article.'], function () {
     Route::get('/drafted', [ArticleController::class, 'showDraftedArticles'])->name('drafted');
     Route::get('/published', [ArticleController::class, 'showPublishedArticles'])->name('published');
@@ -47,9 +48,25 @@ Route::group(['prefix' => 'article', 'middleware'=>'auth', 'as'=>'article.'], fu
     
     Route::get('/edit/{article}', [ArticleController::class, 'edit'])->name('edit');
     Route::put('/edit/{article}', [ArticleController::class, 'update'])->name('update');
+
+    Route::delete('/{article}', [ArticleController::class, 'destroy'])->name('destroy');
 });
 
 
+Route::get('/r&p', [RolesAndPermissionsController::class, 'rolesAndPermissions'])->name('rolesAndPermissions');
+
+// Route::group(['prefix' => 'r&p', 'as'=>'r&p.'], function () {
+//     Route::get('/permissions', [RolesAndPermissionsController::class, 'permissions'])->name('permissions');
+//     Route::get('/assign', [RolesAndPermissionsController::class, 'assignPermissions'])->name('assignPermissions');
+
+
+// });
+
+
+
+Route::group(['prefix' => 'ajax', 'as'=>'ajax.'], function () {
+    Route::post('/getUserPermissions', [RolesAndPermissionsController::class, 'getUserPermissions'])->name('getUserPermissions');
+});
 
 
 
