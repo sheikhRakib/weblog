@@ -6,6 +6,7 @@ use App\Http\Controllers\FrontendController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProfileEditController;
 use App\Http\Controllers\RolesAndPermissionsController;
+use App\Http\Controllers\ShoutBoxController;
 use Illuminate\Support\Facades\Route;
 
 // Frontend Routes
@@ -66,6 +67,8 @@ Route::get('/r&p', [RolesAndPermissionsController::class, 'rolesAndPermissions']
 
 Route::group(['prefix' => 'ajax', 'as'=>'ajax.'], function () {
     Route::post('/getUserPermissions', [RolesAndPermissionsController::class, 'getUserPermissions'])->name('getUserPermissions');
+    Route::post('/sendShouts', [ShoutBoxController::class, 'sendShouts'])->name('sendShouts');
+    Route::post('/getShouts', [ShoutBoxController::class, 'getShouts'])->name('getShouts');
 });
 
 

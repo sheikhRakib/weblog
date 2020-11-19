@@ -10,8 +10,8 @@ class FrontendController extends Controller
 {
     public function index()
     {
-        $data['featured'] = Article::limit(5)->get();
-        $data['articles'] = Article::paginate(3);
+        $data['featured'] = Article::inRandomOrder()->limit(5)->get();
+        $data['articles'] = Article::inRandomOrder()->paginate(3);
 
         return view('frontend.index', $data);
     }

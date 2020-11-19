@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Article;
+use App\Models\ShoutBox;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 
@@ -19,5 +20,6 @@ class DatabaseSeeder extends Seeder
         $this->call(DefaultUserSeeder::class);
         User::factory(15)->create();
         Article::factory(50)->create();
+        ShoutBox::factory(100)->create();
     }
 }
