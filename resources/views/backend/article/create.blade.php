@@ -27,8 +27,9 @@
                     <a href="https://github.com/summernote/summernote">Summernote</a>
                 </p>
             </div>
-
+            @can('publish articles')
             <input type="submit" name='publish' class="btn btn-success" value="Publish" />            
+            @endcan
             <input type="submit" name='save' class="btn btn-default" value="Save Draft" />
         </form>
     </div>

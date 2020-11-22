@@ -32,10 +32,13 @@
                         <td class="mailbox-subject">{{ $article->lead }}</td>
                         <td class="mailbox-star">
                             <div class="btn-group float-right" role="group">
-                                <a href="{{ Route('article.edit', $article->slug) }}" type="button" class="btn btn-warning"><i class="fas fa-edit"></i></a>
-
-                                <a class="btn btn-danger"
-                                    href="#" onclick="event.preventDefault();
+                                @can('edit articles')
+                                <a href="{{ Route('article.edit', $article->slug) }}" type="button"
+                                    class="btn btn-warning"><i class="fas fa-edit"></i></a>
+                                @endcan
+                                
+                                @can('delete articles')
+                                <a class="btn btn-danger" href="#" onclick="event.preventDefault();
                          document.getElementById({{ $article->id }}).submit();"><i class="fas fa-trash"></i></a>
 
                                 <form id="{{ $article->id }}" action="{{ Route('article.destroy', $article->slug) }}"
@@ -43,11 +46,14 @@
                                     @csrf
                                     @method('DELETE')
                                 </form>
+                                @endcan
                             </div>
                         </td>
                     </tr>
                     @empty
-                        <tr><td colspan="4">Nothing to show</td></tr>
+                    <tr>
+                        <td colspan="4">Nothing to show</td>
+                    </tr>
                     @endforelse
                 </tbody>
             </table>

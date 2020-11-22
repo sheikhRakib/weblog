@@ -11,6 +11,8 @@
         <div class="card-body">
             <a href="{{ route('weblog.show', $article->slug) }}" class="text-secondary">
                 <h3 class="card-title text-dark">{{ $article->title }}</h3>
+                <span
+                                class="text-xm badge @if($article->is_published) badge-success @else badge-warning @endif">{{ $article->status }}</span>
                 <br><span class="pl-5 text-muted">&mdash;&nbsp;{{ $article->author->name }}</span>
 
                 <p class="card-text">{{ $article->lead }}</p>

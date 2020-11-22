@@ -72,15 +72,15 @@
 
                 <div class="card col-md-8">
                     <dl class="row card-body">
-                        <dt class="col-sm-3">Name</dt>
+                        <dt class="col-sm-3 text-right">Name</dt>
                         <dd class="col-sm-9" id="fullname">--</dd>
-                        <dt class="col-sm-3">Userame</dt>
+                        <dt class="col-sm-3 text-right">Userame</dt>
                         <dd class="col-sm-9" id="username">--</dd>
-                        <dt class="col-sm-3">Email</dt>
+                        <dt class="col-sm-3 text-right">Email</dt>
                         <dd class="col-sm-9" id="email">--</dd>
-                        <dt class="col-sm-3">Roles</dt>
+                        <dt class="col-sm-3 text-right">Roles</dt>
                         <dd class="col-sm-9 text-capitalize" id="roles">--</dd>
-                        <dt class="col-sm-3">Permissions</dt>
+                        <dt class="col-sm-3 text-right">Permissions</dt>
                         <dd class="col-sm-9 text-capitalize" id="permissions">--</dd>
                     </dl>
                 </div>
@@ -98,8 +98,8 @@
 <link rel="stylesheet" href="{{ asset('plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css') }}">
 
 <style>
-    dd::before {
-      content: ": ";
+    dt::after {
+      content: " :";
     }
 </style>
 @endsection

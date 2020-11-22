@@ -15,32 +15,28 @@ class RolesAndPermissionsSeeder extends Seeder
         // Reset cached roles and permissions
         app()[PermissionRegistrar::class]->forgetCachedPermissions();
 
-        $articlePermissions = [
+        $permissions = [
+            'access shoutbox', 
+            'edit profile',
+
             'access articles',
             'write articles',
             'edit articles',
             'delete articles',
             'publish articles',
-        ];
-        $rolePermissions = [
-            'access roles',
+
+            'access roles & permissions',
+            // yet to done
             'assign roles',
             'retract roles',
-        ];
-        $permissionPermissions = [
-            'access permissions',
             'assign permissions',
             'retract permissions',
-        ];
-        $userPermissions = [
+
             'access user section',
             'delete user',
         ];
         
-        foreach($articlePermissions as $permission) Permission::create(['name' => $permission]);
-        foreach($rolePermissions as $permission) Permission::create(['name' => $permission]);
-        foreach($permissionPermissions as $permission) Permission::create(['name' => $permission]);
-        foreach($userPermissions as $permission) Permission::create(['name' => $permission]);
+        foreach($permissions as $permission) Permission::create(['name' => $permission]);
         // =======================================================================
         
         $system     = Role::create(['name' => 'system']);
@@ -50,26 +46,20 @@ class RolesAndPermissionsSeeder extends Seeder
         // =======================================================================
 
         $ap = [
+            'edit profile',
+            'access shoutbox',
             'access articles',
-            'delete articles',
-            'access roles',
-            'assign roles',
-            'retract roles',
-            'access permissions', 
-            'assign permissions',
-            'retract permissions',
-            'access user section',
-            'delete user',
+            'access roles & permissions',
         ];
         $mp = [
+            'edit profile',
+            'access shoutbox',
             'access articles',
             'delete articles',
-            'access permissions', 
-            'retract permissions',
-            'access user section',
-            'delete user',
         ];
         $up = [
+            'edit profile',
+            'access shoutbox',
             'access articles',
             'write articles',
             'edit articles',
@@ -77,6 +67,8 @@ class RolesAndPermissionsSeeder extends Seeder
             'publish articles',
         ];
 
+        $admin->syncPermissions($ap);
+        $moderator->syncPermissions($mp);
         $user->syncPermissions($up);
     }
 }

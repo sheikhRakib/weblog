@@ -10,15 +10,27 @@ class FrontendController extends Controller
 {
     public function index()
     {
-        $data['featured'] = Article::inRandomOrder()->limit(5)->get();
-        $data['articles'] = Article::inRandomOrder()->paginate(3);
-
+        $data['featured'] = cache()->remember('weblog.featured', 60, function(){
+            return Article::where('is_published', true)
+            ->inRandomOrder()
+            ->limit(5)->get();
+        });
+        
+        $data['articles'] = Article::where('is_published', true)
+            ->inRandomOrder()
+            ->paginate(3);
+        
         return view('frontend.index', $data);
     }
 
-    public function show(Article $article)
+    public function show($slug)
     {
-        return view('frontend.show', compact('article'));
+        $data['article'] = Article::where('slug', $slug)
+        ->where('is_published', true)
+        ->first();
+
+        if(!$data['article']) abort(404);
+        return view('frontend.show', $data);
     }
 
     public function query($query)

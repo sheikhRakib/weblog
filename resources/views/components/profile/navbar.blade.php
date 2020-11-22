@@ -26,10 +26,12 @@
                     <i class="fas fa-user-alt w-20"></i>
                     <span>Profile</span>
                 </a>
+                @can('edit profile')
                 <a href="{{ route('profile.edit.index') }}" class="dropdown-item">
                     <i class="fas fa-user-cog w-20"></i>
                     <span>Edit Profile</span>
                 </a>
+                @endcan
 
                 <div class="dropdown-divider"></div>
                 

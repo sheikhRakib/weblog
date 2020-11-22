@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Route;
 
 // Frontend Routes
 Route::get('/', [FrontendController::class, 'index'])->name('weblog.index');
-Route::get('/show/{article}', [FrontendController::class, 'show'])->name('weblog.show');
+Route::get('/show/{slug}', [FrontendController::class, 'show'])->name('weblog.show');
 Route::get('/query/{query}', [FrontendController::class, 'query'])->name('weblog.query');
 
 // Add Comments on Articles
@@ -27,7 +27,7 @@ Route::group(['prefix'=>'profile', 'middleware'=>'auth', 'as'=>'profile.'], func
     Route::get('/', [ProfileController::class, 'index'])->name('index');
 
     // Profile edit section
-    Route::group(['prefix' => 'edit', 'as'=>'edit.'], function () {
+    Route::group(['prefix' => 'edit', 'as'=>'edit.', 'middleware'=>['can:edit profile'] ], function () {
         Route::get('/', [ProfileEditController::class, 'index'])->name('index');
         Route::get('/info', [ProfileEditController::class, 'showEditInfo'])->name('info');
         Route::get('/email', [ProfileEditController::class, 'showEditEmail'])->name('email');
@@ -40,21 +40,23 @@ Route::group(['prefix'=>'profile', 'middleware'=>'auth', 'as'=>'profile.'], func
 });
 
 // Article Section
-Route::group(['prefix' => 'article', 'middleware'=>'auth', 'as'=>'article.'], function () {
+Route::group(['prefix' => 'article', 'middleware'=>['auth', 'can:access articles'], 'as'=>'article.'], function () {
     Route::get('/drafted', [ArticleController::class, 'showDraftedArticles'])->name('drafted');
     Route::get('/published', [ArticleController::class, 'showPublishedArticles'])->name('published');
     
-    Route::get('/create', [ArticleController::class, 'create'])->name('create');
+    Route::get('/create', [ArticleController::class, 'create'])->name('create')->middleware('can:write articles');
     Route::post('/create', [ArticleController::class, 'store'])->name('store');
     
-    Route::get('/edit/{article}', [ArticleController::class, 'edit'])->name('edit');
+    Route::get('/edit/{article}', [ArticleController::class, 'edit'])->name('edit')->middleware('can:edit articles');
     Route::put('/edit/{article}', [ArticleController::class, 'update'])->name('update');
 
     Route::delete('/{article}', [ArticleController::class, 'destroy'])->name('destroy');
 });
 
 
-Route::get('/r&p', [RolesAndPermissionsController::class, 'rolesAndPermissions'])->name('rolesAndPermissions');
+Route::get('/r&p', [RolesAndPermissionsController::class, 'rolesAndPermissions'])
+->name('rolesAndPermissions')
+->middleware('can:access roles & permissions');
 
 // Route::group(['prefix' => 'r&p', 'as'=>'r&p.'], function () {
 //     Route::get('/permissions', [RolesAndPermissionsController::class, 'permissions'])->name('permissions');
