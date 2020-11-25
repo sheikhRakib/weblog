@@ -10,19 +10,24 @@ use Illuminate\Support\Facades\Session;
 
 class ArticleController extends Controller
 {
+    public function manageArticles()
+    {
+        $data['articles'] = Article::orderByDesc('updated_at')->get();
+
+        return view('backend.article.manage', $data);
+    }
     public function showDraftedArticles()
     {
         $data['articles'] = Article::where('user_id', Auth::id())
-        ->where('is_published', false)
+        ->isPublished(false)
         ->orderByDesc('updated_at')->paginate(5);
         
         return view('backend.article.list', $data);
     }
 
-    public function showPublishedArticles()
-    {
+    public function showPublishedArticles() {
         $data['articles'] = Article::where('user_id', Auth::id())
-        ->where('is_published', true)
+        ->isPublished(true)
         ->orderByDesc('updated_at')->paginate(5);
         
         return view('backend.article.list', $data);
@@ -84,5 +89,17 @@ class ArticleController extends Controller
         Session::flash('success', 'Article Deleted');
 
         return redirect()->back();
+    }
+
+    // Ajax
+    public function getArticle(Request $request)
+    {
+        $article = Article::join('users', 'users.id', '=', 'articles.user_id')
+        ->select('articles.slug', 'articles.title' ,'users.name', 'articles.is_published', 'articles.description')
+        ->where('slug', $request['slug'])->first();
+        
+        return response()->json([
+            'article' => $article,
+        ]);
     }
 }

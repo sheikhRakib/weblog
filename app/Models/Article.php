@@ -53,4 +53,16 @@ class Article extends Model
             ->generateSlugsFrom('title')
             ->saveSlugsTo('slug');
     }
+
+    
+    // Query Helpers
+
+    public function scopeIsPublished($query, $published) {
+        return $query->where('is_published', $published);
+    }
+
+    public function scopeSearchArticle($query, $q) {
+        return $query->where('title','like', '%'.$q.'%')
+        ->orWhere('description','like', '%'.$q.'%');
+    }
 }

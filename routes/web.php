@@ -41,9 +41,14 @@ Route::group(['prefix'=>'profile', 'middleware'=>'auth', 'as'=>'profile.'], func
 
 // Article Section
 Route::group(['prefix' => 'article', 'middleware'=>['auth', 'can:access articles'], 'as'=>'article.'], function () {
-    Route::get('/drafted', [ArticleController::class, 'showDraftedArticles'])->name('drafted');
-    Route::get('/published', [ArticleController::class, 'showPublishedArticles'])->name('published');
+    Route::group(['middleware' => ['can:view own articles']], function () {
+        Route::get('/drafted', [ArticleController::class, 'showDraftedArticles'])->name('drafted');
+        Route::get('/published', [ArticleController::class, 'showPublishedArticles'])->name('published');
+    });
+
+    Route::get('/manage', [ArticleController::class, 'manageArticles'])->name('manage')->middleware('can:manage articles');
     
+
     Route::get('/create', [ArticleController::class, 'create'])->name('create')->middleware('can:write articles');
     Route::post('/create', [ArticleController::class, 'store'])->name('store');
     
@@ -69,6 +74,7 @@ Route::get('/r&p', [RolesAndPermissionsController::class, 'rolesAndPermissions']
 
 Route::group(['prefix' => 'ajax', 'as'=>'ajax.'], function () {
     Route::post('/getUserPermissions', [RolesAndPermissionsController::class, 'getUserPermissions'])->name('getUserPermissions');
+    Route::post('/getArticle', [ArticleController::class, 'getArticle'])->name('getArticle');
     Route::post('/sendShouts', [ShoutBoxController::class, 'sendShouts'])->name('sendShouts');
     Route::post('/getShouts', [ShoutBoxController::class, 'getShouts'])->name('getShouts');
 });

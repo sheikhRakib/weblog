@@ -36,13 +36,17 @@ class ShoutBoxController extends Controller
         $shouts = ShoutBox::where('id', '>', $lsID)->orderBy('id', 'desc')->get();
         
         $shouts = ShoutBox::join('users', 'users.id', '=', 'shout_boxes.sender_id')
-            ->select('users.name', 'shout_boxes.message')
-            ->where('shout_boxes.id', '>', $lsID)
-            ->get();
+        ->select('users.name', 'shout_boxes.message', 'shout_boxes.created_at')
+        ->where('shout_boxes.id', '>', $lsID)
+        ->get()
+        ->map(function($shout){
+            $shout->time = $shout->created_at->format('M d \a\t h:i A');
+            return $shout;
+        })->forget('shout_boxes.created_at');
         
         return response()->json([
             'shouts' => $shouts,
-            'shoutID' => $shoutID,    
+            'shoutID' => $shoutID,
         ]);
     }
 }

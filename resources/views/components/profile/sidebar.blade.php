@@ -12,42 +12,56 @@
         <!-- Sidebar Menu -->
         <nav class="mt-2">
             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-                <li class="nav-header">WEB LINKS</li>
-                
+                <li class="nav-header"></li>
                 @can('access articles')
                 <!-- Articles -->
-                <li class="nav-item has-treeview">
-                    <a href="#" class="nav-link">
+                <li class="nav-header">ARTICLES</li>
+
+                @can('manage articles')
+                <!-- Manage Articles -->
+                <li class="nav-item">
+                    <a href="{{ Route('article.manage') }}" class="nav-link">
                         <i class="nav-icon far fa-file-word"></i>
-                        <p>Article<i class="fas fa-angle-left right"></i></p>
+                        <p>Manage Articles</p>
                     </a>
-                    <ul class="nav nav-treeview bg-gray rounded">
-                        <li class="nav-item">
-                            <a href="{{ Route('article.drafted') }}" class="nav-link">
-                                <i class="nav-icon far fa-copy"></i>
-                                <p>Drafted</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{{ Route('article.published') }}" class="nav-link">
-                                <i class="nav-icon far fa-flag"></i>
-                                <p>Published</p>
-                            </a>
-                        </li>
-                        @can('write articles')
-                        <li class="nav-item">
-                            <a href="{{ Route('article.create') }}" class="nav-link">
-                                <i class="nav-icon far fa-plus-square"></i>
-                                <p>Create</p>
-                            </a>
-                        </li>  
-                        @endcan
-                    </ul>
                 </li>
                 @endcan
+                
+                @can('view own articles')
+                <!-- View Own Articles -->
+                <li class="nav-item">
+                    <a href="{{ Route('article.drafted') }}" class="nav-link">
+                        <i class="nav-icon far fa-copy"></i>
+                        <p>Drafted</p>
+                    </a>
+                </li>
+                
+                <li class="nav-item">
+                    <a href="{{ Route('article.published') }}" class="nav-link">
+                        <i class="nav-icon far fa-flag"></i>
+                        <p>Published</p>
+                    </a>
+                </li>
+                <!-- ./View Own Articles -->
+                @endcan
 
+                
+                @can('write articles')
+                <!-- Write Articles -->
+                <li class="nav-item">
+                    <a href="{{ Route('article.create') }}" class="nav-link">
+                        <i class="nav-icon far fa-plus-square"></i>
+                        <p>Create</p>
+                    </a>
+                </li>
+                <!-- ./Write Articles -->
+                @endcan
+                
+                <!-- ./Articles -->
+                @endcan
                 @can('access roles & permissions')
                 <!-- Roles and Permissions -->
+                <li class="nav-header">MANAGEMENT</li>
                 <li class="nav-item">
                     <a href="{{ Route('rolesAndPermissions') }}" class="nav-link">
                         <i class="nav-icon fas fa-terminal"></i>

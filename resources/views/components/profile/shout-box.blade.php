@@ -17,6 +17,7 @@
                     @foreach ($shouts as $shout)
                     <div class="direct-chat-infos">
                         <span class="direct-chat-name">{{ $shout->sender->name }}</span>
+                        <span class="direct-chat-timestamp float-right">{{ $shout->time }}</span>
                         <span class="direct-chat-text">{{ $shout->message }}</span>
                     </div>
                     @endforeach
@@ -103,6 +104,7 @@
                             $("#shoutbox").prepend(
                                 "<div class=\"direct-chat-infos\">" +
                                 "<span class=\"direct-chat-name\">" + shout.name + "</span>" +
+                                "<span class=\"direct-chat-timestamp float-right\">" + shout.time + "</span>" +
                                 "<span class=\"direct-chat-text\">" + shout.message +
                                 "</span>" +
                                 "</div>"

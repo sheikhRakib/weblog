@@ -14,7 +14,7 @@ class ArticleFactory extends Factory
         return [
             'title'        => $this->faker->sentence($nbWords = 10, $variableNbWords = true),
             'description'  => $this->faker->paragraphs($nb = 20, $asText = true),
-            'user_id'      => $this->faker->numberBetween(1,12),
+            'user_id'      => $this->faker->numberBetween(5,12),
             'is_published' => $this->faker->boolean($chanceOfGettingTrue = 75),
         ];
     }

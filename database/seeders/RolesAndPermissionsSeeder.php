@@ -20,6 +20,8 @@ class RolesAndPermissionsSeeder extends Seeder
             'edit profile',
 
             'access articles',
+            'manage articles',
+            'view own articles',
             'write articles',
             'edit articles',
             'delete articles',
@@ -49,18 +51,21 @@ class RolesAndPermissionsSeeder extends Seeder
             'edit profile',
             'access shoutbox',
             'access articles',
+            'manage articles',
             'access roles & permissions',
         ];
         $mp = [
             'edit profile',
             'access shoutbox',
             'access articles',
+            'manage articles',
             'delete articles',
         ];
         $up = [
             'edit profile',
             'access shoutbox',
             'access articles',
+            'view own articles',
             'write articles',
             'edit articles',
             'delete articles',
