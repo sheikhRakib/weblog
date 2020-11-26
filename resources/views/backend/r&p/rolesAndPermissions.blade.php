@@ -55,6 +55,19 @@
     </div>
 </div>
 
+
+<div class="row">
+    <div class="col-12">
+        <x-collapsibleCard title="Rules to change Roles/Permissions">
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item">If role is changed then only default permissions for that role will remain. Other permissions wiill removed for that user.</li>
+                <li class="list-group-item">No permissions that came via a role can be revoked. Only Directly assigned permissions can be revoked.</li>
+            </ul>
+        </x-collapsibleCard>
+    </div>
+    
+</div>
+
 <div class="row">
     <div class="col-md-12">
         {{-- Asign user Permissions --}}
@@ -62,12 +75,49 @@
 
             <div class="row">
                 <div class="col-md-4">
-                    <select class="select2 w-100" name="user" id="user">
-                        <option value="-1" selected disabled>Select a user</option>
-                        @foreach ($users as $user)
-                        <option value="{{ $user->username }}">{{ $user->name }} ({{ $user->username }})</option>
-                        @endforeach
-                    </select>
+                    <div class="form-group">
+                        <div class="form-label bg-info rounded-top px-2">View user information</div>
+                        <select class="select2 w-100" name="user" id="user">
+                            <option value="-1" selected disabled>Select a user</option>
+                            @foreach ($users as $user)
+                            <option value="{{ $user->username }}">{{ $user->name }} ({{ $user->username }})</option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    @can('modify roles')
+
+                    {{-- Assign/Revoke Roles --}}
+                    <div class="form-group mt-4">
+                        <div class="form-label bg-info rounded-top px-2">Assign/Revoke Roles</div>
+                        <select class="select2 w-100" name="ModifyRoles" id="ModifyRoles">
+                            <option value="-1" selected disabled>Select a role</option>
+                            @foreach ($roles as $role)
+                            <option value="{{ $role->name }}">{{ $role->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    @endcan
+
+                    @can('modify permissions')
+                    {{-- Assign/Revoke Roles --}}
+                    <div class="form-group mt-4">
+                        <div class="form-label bg-info rounded-top px-2">Assign/Revoke Permissions</div>
+                        <select class="select2 w-100" name="ModifyPermissions" id="ModifyPermissions">
+                            <option value="-1" selected disabled>Select a Permission</option>
+                            @foreach ($permissions as $permission)
+                            <option value="{{ $permission->name }}">{{ $permission->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    @endcan
+
+                    @role('admin')
+                    <div class="d-flex justify-content-between">
+                        <button id="assignorrevoke" type="submit" class="btn btn-primary">Assign Or Revoke</button>
+                        <button id="clearRP" class="btn btn-danger">Clear</button>
+                    </div>
+                    @endrole
                 </div>
 
                 <div class="card col-md-8">
@@ -99,8 +149,9 @@
 
 <style>
     dt::after {
-      content: " :";
+        content: " :";
     }
+
 </style>
 @endsection
 
@@ -116,19 +167,30 @@
 
 </script>
 
+<script>
+    $(document).ready(function () { 
+        $('#clearRP').on('click', function () { 
+            $('#ModifyRoles').val("-1").change();
+            $('#ModifyPermissions').val("-1").change();
+         })
+     })
+</script>
+
 
 <!-- Ajax -->
+{{-- AJAX function to get user information --}}
 <script type="text/javascript">
-    $.ajaxSetup({
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        }
-    });
     $(document).ready(function () {
         // show user data
         $('#user').on('change', function (e) {
             var username = e.target.value;
 
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+     
             $.ajax({
                 url: "{{ route('ajax.getUserPermissions') }}",
                 type: "POST",
@@ -145,15 +207,21 @@
                     $("#email").html(data.user.email)
 
                     // Show user roles 
-                    if (data.roles.length) { $("#roles").html("") }
-                    else { $("#roles").html("--") }
+                    if (data.roles.length) {
+                        $("#roles").html("")
+                    } else {
+                        $("#roles").html("--")
+                    }
                     $.each(data.roles, function (index, role) {
                         $("#roles").append(role + "<br>")
                     })
 
                     // Show user permissions
-                    if (data.userPermissions.length) { $("#permissions").html("") }
-                    else { $("#permissions").html("--") }
+                    if (data.userPermissions.length) {
+                        $("#permissions").html("")
+                    } else {
+                        $("#permissions").html("--")
+                    }
                     $.each(data.userPermissions, function (index, permission) {
                         $("#permissions").append(permission.name + "<br>")
                     })
@@ -164,8 +232,50 @@
             })
         });
 
-        
+
     });
+
+</script>
+
+{{-- AJAX function to modify roles and permissions --}}
+<script type="text/javascript">
+    $('#assignorrevoke').on('click', function () {
+        let username = $('#user').val();
+        let role = $('#ModifyRoles').val();
+        let permission = $('#ModifyPermissions').val();
+
+
+        if(!username) return 0;
+
+        if(!(role || permission)) return 0;
+        
+        $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+     
+            $.ajax({
+                url: "{{ route('ajax.modifyRoleOrPermission') }}",
+                type: "POST",
+                data: {
+                    username: username,
+                    role: role,
+                    permission: permission,
+                },
+
+                success: function (data) {
+                    $('#user').val(username).change();
+                    $('#ModifyRoles').val("-1").change();
+                    $('#ModifyPermissions').val("-1").change();
+
+                    console.log(data.message);
+                },
+                error: function (data, textStatus, errorThrown) {
+                    console.log(data);
+                },
+            })
+    })
 
 </script>
 @endsection

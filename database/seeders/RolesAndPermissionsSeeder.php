@@ -29,10 +29,8 @@ class RolesAndPermissionsSeeder extends Seeder
 
             'access roles & permissions',
             // yet to done
-            'assign roles',
-            'retract roles',
-            'assign permissions',
-            'retract permissions',
+            'modify roles',
+            'modify permissions',
 
             'access user section',
             'delete user',
@@ -53,6 +51,8 @@ class RolesAndPermissionsSeeder extends Seeder
             'access articles',
             'manage articles',
             'access roles & permissions',
+            'modify roles',
+            'modify permissions',
         ];
         $mp = [
             'edit profile',
@@ -60,6 +60,7 @@ class RolesAndPermissionsSeeder extends Seeder
             'access articles',
             'manage articles',
             'delete articles',
+            'access roles & permissions',
         ];
         $up = [
             'edit profile',

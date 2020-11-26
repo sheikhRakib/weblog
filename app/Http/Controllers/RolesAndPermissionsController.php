@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Session;
+use Spatie\Permission\Models\Permission;
+use Spatie\Permission\PermissionRegistrar;
 
 class RolesAndPermissionsController extends Controller
 {
@@ -29,12 +32,29 @@ class RolesAndPermissionsController extends Controller
         return view('backend.r&p.rolesAndPermissions', $data);        
     }
 
-    public function assignPermissions()
-    {
-        // $data['users'] = $this->users;
-        // $data['permissions'] = $this->permissions;
 
-        // return view('backend.r&p.assignPermissions', $data);
+    // AJAX function
+    public function modifyRoleOrPermission(Request $request)
+    {
+        $user = User::where('username', $request['username'])->first();
+        if(!$user) abort(404);
+
+        if($request['role']) {
+            $user->syncPermissions();
+            $user->syncRoles($request['role']);
+        } 
+        
+        if($request['permission']){
+            if($user->hasPermissionTo($request['permission'])) {
+                $user->revokePermissionTo($request['permission']);
+            } else {
+                $user->givePermissionTo($request['permission']);
+            }
+        }
+
+        return response()->json([
+            'message' => 'success',
+        ]);
     }
 
 

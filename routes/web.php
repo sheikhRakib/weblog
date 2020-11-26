@@ -74,9 +74,13 @@ Route::get('/r&p', [RolesAndPermissionsController::class, 'rolesAndPermissions']
 
 Route::group(['prefix' => 'ajax', 'as'=>'ajax.'], function () {
     Route::post('/getUserPermissions', [RolesAndPermissionsController::class, 'getUserPermissions'])->name('getUserPermissions');
+    Route::post('/modifyRoleOrPermission', [RolesAndPermissionsController::class, 'modifyRoleOrPermission'])->name('modifyRoleOrPermission');
+    
     Route::post('/getArticle', [ArticleController::class, 'getArticle'])->name('getArticle');
+    
     Route::post('/sendShouts', [ShoutBoxController::class, 'sendShouts'])->name('sendShouts');
     Route::post('/getShouts', [ShoutBoxController::class, 'getShouts'])->name('getShouts');
+
 });
 
 
