@@ -6,8 +6,7 @@ use App\Models\Article;
 
 class FrontendController extends Controller
 {
-    public function index()
-    {
+    public function index() {
         $data['featured'] = cache()->remember('weblog.featured', 60, function(){
             return Article::isPublished(true)
             ->inRandomOrder()
@@ -21,8 +20,7 @@ class FrontendController extends Controller
         return view('frontend.index', $data);
     }
 
-    public function show($slug)
-    {
+    public function show($slug) {
         $data['article'] = Article::where('slug', $slug)
         ->isPublished(true)
         ->first();
@@ -30,8 +28,7 @@ class FrontendController extends Controller
         return $data['article'] ? view('frontend.show', $data) : abort(404);
     }
 
-    public function query($query)
-    {
+    public function query($query) {
         $data['query'] = $query;
         $data['articles'] = Article::isPublished(true)->searchArticle($query)->paginate(5);
 

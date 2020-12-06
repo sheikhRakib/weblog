@@ -12,28 +12,23 @@ use Illuminate\Support\Facades\Session;
 
 class ProfileEditController extends Controller
 {
-    public function index()
-    {
+    public function index() {
         return redirect()->route('profile.edit.info');
     }
 
-    public function showEditInfo()
-    {
+    public function showEditInfo() {
         return view('backend.profile.edit.info');
     }
     
-    public function showEditEmail()
-    {
+    public function showEditEmail() {
         return view('backend.profile.edit.email');
     }
 
-    public function showEditPassword()
-    {
+    public function showEditPassword() {
         return view('backend.profile.edit.password');
     }
 
-    public function updateInfo(EditInfoRequest $request)
-    {
+    public function updateInfo(EditInfoRequest $request) {
         $user = User::findorFail(Auth::id());
     
         $user->name      = $request['name'];
@@ -51,8 +46,7 @@ class ProfileEditController extends Controller
 
     public function updateEmail(EditEmailRequest $request) {
         if (Auth::user()->email == $request['old-email'] && 
-        Hash::check( $request['password'], Auth::user()->password)) 
-        {
+        Hash::check( $request['password'], Auth::user()->password)) {
             $user = User::find(Auth::id());
             
             $user->email = $request['email'];

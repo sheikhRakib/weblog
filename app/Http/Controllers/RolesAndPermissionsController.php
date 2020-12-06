@@ -5,35 +5,36 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Spatie\Permission\Models\Role;
 
 class RolesAndPermissionsController extends Controller
 {
     private $users;
     private $permissions;
     private $roles;
+    private $rp;
 
-    public function __construct()
-    {
-        $this->users = User::all();
-        $this->roles = DB::table('roles')->get();
-        $this->permissions = DB::table('permissions')->get();
-
+    public function __construct() {
+        $this->users        = User::orderByDesc('id')->get();
+        $this->roles        = DB::table('roles')->orderBy('name')->get();
+        $this->permissions  = DB::table('permissions')->orderBy('name')->get();
+        $this->rp           = Role::with('permissions')->orderBy('name')->get();
     }
     
-    public function rolesAndPermissions()
-    {
-        $data['roles'] = $this->roles;
-        $data['permissions'] = $this->permissions;
-        $data['users'] = $this->users;
+    public function rolesAndPermissions() {
+        $data['roles']          = $this->roles;
+        $data['permissions']    = $this->permissions;
+        $data['users']          = $this->users;
+        $data['rp']             = $this->rp;
 
-        return view('backend.management.rolesAndPermissions', $data);        
+        return view('backend.management.rolesAndPermissions', $data);
     }
 
 
     // AJAX function
-    public function modifyRoleOrPermission(Request $request)
-    {
+    public function modifyRoleOrPermission(Request $request) {
         $user = User::where('username', $request['username'])->first();
+
         if(!$user) abort(404);
 
         if($request['role']) {
@@ -42,7 +43,6 @@ class RolesAndPermissionsController extends Controller
             } else {
                 $user->assignRole($request['role']);
             }
-            $user->syncPermissions();
         } 
         
         if($request['permission']){
@@ -60,16 +60,14 @@ class RolesAndPermissionsController extends Controller
 
 
     // AJAX Function to get user permissions
-    public function getUserPermissions(Request $request)
-    {
-        $user = User::where('username', $request['username'])->first();
-        $roles = $user->getRoleNames();
-        
-        $dp = $user->getDirectPermissions()->map(function($permission){
+    public function getUserPermissions(Request $request) {
+        $user   = User::where('username', $request['username'])->first();
+        $roles  = $user->getRoleNames();
+        $dp     = $user->getDirectPermissions()->map(function($permission) {
             $permission->level = "Direct";
             return $permission;
         });
-        $rp = $user->getPermissionsViaRoles()->map(function($permission){
+        $rp     = $user->getPermissionsViaRoles()->map(function($permission){
             $permission->level = "via Role";
             return $permission;
         });

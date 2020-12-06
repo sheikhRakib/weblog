@@ -55,17 +55,32 @@
     </div>
 </div>
 
-
 <div class="row">
-    <div class="col-12">
-        <x-collapsibleCard title="Rules to change Roles/Permissions" collapse="true">
-            <ul class="list-group list-group-flush">
-                <li class="list-group-item">If role is changed then only default permissions for that role will remain. Other permissions wiill removed for that user.</li>
-                <li class="list-group-item">No permissions that came via a role can be revoked. Only Directly assigned permissions can be revoked.</li>
-            </ul>
+    <div class="col-md-6">
+        <x-collapsibleCard title="Role Details" collapse="true">
+            <ul>
+                @foreach ($rp as $role)
+                <li class="text-bold">{{ ucwords($role->name) }}</li>
+                <ul>
+                    @forelse ($role->permissions as $permission)
+                    <li>{{ ucwords($permission->name) }}</li>
+                    @empty
+                    <li>--</li>
+                    @endforelse
+                </ul>
+                @endforeach
         </x-collapsibleCard>
     </div>
-    
+
+    <div class="col-md-6">
+        <x-collapsibleCard title="Rules to change Roles/Permissions" collapse="true">
+            <ol>
+                <li>Users can have multiple role or no role.</li>
+                <li>Any permission that comes via role, cannot be revoked.</li>
+                <li>Direct permissions will remain assigned when roles assigned/revoked.</li>
+            </ol>
+        </x-collapsibleCard>
+    </div>
 </div>
 
 <div class="row">
@@ -167,12 +182,13 @@
 </script>
 
 <script>
-    $(document).ready(function () { 
-        $('#clearRP').on('click', function () { 
+    $(document).ready(function () {
+        $('#clearRP').on('click', function () {
             $('#ModifyRoles').val("-1").change();
             $('#ModifyPermissions').val("-1").change();
-         })
-     })
+        })
+    })
+
 </script>
 
 
@@ -189,7 +205,7 @@
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
             });
-     
+
             $.ajax({
                 url: "{{ route('ajax.getUserPermissions') }}",
                 type: "POST",
@@ -222,7 +238,9 @@
                         $("#permissions").html("--")
                     }
                     $.each(data.userPermissions, function (index, permission) {
-                        $("#permissions").append(permission.name +" ("+permission.level+")" + "<br>")
+                        $("#permissions").append(permission.name + " (" +
+                            permission
+                            .level + ")" + "<br>")
                     })
                 },
                 error: function (data, textStatus, errorThrown) {
@@ -244,36 +262,36 @@
         let permission = $('#ModifyPermissions').val();
 
 
-        if(!username) return 0;
+        if (!username) return 0;
 
-        if(!(role || permission)) return 0;
-        
+        if (!(role || permission)) return 0;
+
         $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
-     
-            $.ajax({
-                url: "{{ route('ajax.modifyRoleOrPermission') }}",
-                type: "POST",
-                data: {
-                    username: username,
-                    role: role,
-                    permission: permission,
-                },
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
 
-                success: function (data) {
-                    $('#user').val(username).change();
-                    $('#ModifyRoles').val("-1").change();
-                    $('#ModifyPermissions').val("-1").change();
+        $.ajax({
+            url: "{{ route('ajax.modifyRoleOrPermission') }}",
+            type: "POST",
+            data: {
+                username: username,
+                role: role,
+                permission: permission,
+            },
 
-                    console.log(data.message);
-                },
-                error: function (data, textStatus, errorThrown) {
-                    console.log(data);
-                },
-            })
+            success: function (data) {
+                $('#user').val(username).change();
+                $('#ModifyRoles').val("-1").change();
+                $('#ModifyPermissions').val("-1").change();
+
+                console.log(data.message);
+            },
+            error: function (data, textStatus, errorThrown) {
+                console.log(data);
+            },
+        })
     })
 
 </script>

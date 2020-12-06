@@ -7,7 +7,7 @@
 
     <!-- Display Picture -->
     <div class="widget-user-image">
-        <img class="img-circle elevation-2" src="{{ asset('plugins/adminlte/img/AdminLTELogo.png') }}"
+        <img class="img-circle elevation-2" src="https://ui-avatars.com/api/?bold=true&color=272a6b&name={{ Auth::user()->name }}"
             alt="User Avatar">
     </div>
 

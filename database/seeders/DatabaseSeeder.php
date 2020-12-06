@@ -19,7 +19,7 @@ class DatabaseSeeder extends Seeder
         $this->call(RolesAndPermissionsSeeder::class);
         $this->call(DefaultUserSeeder::class);
         User::factory(15)->create();
-        Article::factory(50)->create();
+        Article::factory(500)->create();
         ShoutBox::factory(100)->create();
     }
 }

@@ -55,7 +55,6 @@ class Article extends Model
 
     
     // Query Helpers
-
     public function scopeIsPublished($query, $published) {
         return $query->where('is_published', $published);
     }

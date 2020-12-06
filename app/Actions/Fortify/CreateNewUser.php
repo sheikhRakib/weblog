@@ -35,6 +35,8 @@ class CreateNewUser implements CreatesNewUsers
         ]);
 
         $user->assignRole("user");
+        $user->assignRole("social");
+        $user->assignRole("writer");
 
         return $user;
     }

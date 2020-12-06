@@ -12,7 +12,7 @@ class ShoutBoxFactory extends Factory
     public function definition()
     {
         return [
-            'sender_id' => $this->faker->numberBetween(1,12),
+            'sender_id' => $this->faker->numberBetween(5,12),
             'message'   => $this->faker->sentence($nbWords = 10, $variableNbWords = true),
         ];
     }

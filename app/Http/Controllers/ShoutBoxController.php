@@ -2,9 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Libraries\C_DateTime;
 use App\Models\ShoutBox;
-use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -16,9 +14,9 @@ class ShoutBoxController extends Controller
             'message' => ['required', 'string',],
         ]);
         
-        $shout = new ShoutBox();
-        $shout->sender_id = Auth::id();
-        $shout->message = $request['message'];
+        $shout              = new ShoutBox();
+        $shout->sender_id   = Auth::id();
+        $shout->message     = $request['message'];
         $shout->save();
         
         return response()->json([
@@ -28,14 +26,11 @@ class ShoutBoxController extends Controller
 
     public function getShouts(Request $request)
     {
-        $lsID = $request['lsID'];
-        $shoutID = ShoutBox::select('id')->orderBy('id', 'desc')->first();
-        $shoutID = $shoutID->id;
-
-
-        $shouts = ShoutBox::where('id', '>', $lsID)->orderBy('id', 'desc')->get();
-        
-        $shouts = ShoutBox::join('users', 'users.id', '=', 'shout_boxes.sender_id')
+        $lsID       = $request['lsID'];
+        $shoutID    = ShoutBox::select('id')->orderBy('id', 'desc')->first();
+        $shoutID    = $shoutID->id;
+        $shouts     = ShoutBox::where('id', '>', $lsID)->orderBy('id', 'desc')->get();
+        $shouts     = ShoutBox::join('users', 'users.id', '=', 'shout_boxes.sender_id')
         ->select('users.name', 'shout_boxes.message', 'shout_boxes.created_at')
         ->where('shout_boxes.id', '>', $lsID)
         ->get()
@@ -45,7 +40,7 @@ class ShoutBoxController extends Controller
         })->forget('shout_boxes.created_at');
         
         return response()->json([
-            'shouts' => $shouts,
+            'shouts'  => $shouts,
             'shoutID' => $shoutID,
         ]);
     }

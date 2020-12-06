@@ -10,14 +10,13 @@ use Illuminate\Support\Facades\Session;
 
 class ArticleController extends Controller
 {
-    public function manageArticles()
-    {
+    public function manageArticles() {
         $data['articles'] = Article::orderByDesc('updated_at')->get();
 
         return view('backend.article.manage', $data);
     }
-    public function showDraftedArticles()
-    {
+
+    public function showDraftedArticles() {
         $data['articles'] = Article::where('user_id', Auth::id())
         ->isPublished(false)
         ->orderByDesc('updated_at')->paginate(5);
@@ -33,53 +32,21 @@ class ArticleController extends Controller
         return view('backend.article.list', $data);
     }
 
-    public function create()
-    {
+    public function create() {
         return view('backend.article.create');
     }
 
-    public function edit(Article $article)
-    {
+    public function edit(Article $article) {
         return view('backend.article.edit', compact('article'));
     }
 
-    public function store(ArticleRequest $request, Article $article){
-        $article->title = $request['title'];
-        $article->user_id = Auth::id();
-        $article->description = $request['description'];
-        
-        if ($request->has('publish')) {
-            $article->is_published = true;
-            $message = 'Published Successfully';
-            $url = route('article.published');
-        } else {
-            $article->is_published = false;
-            $message = 'Saved as a Draft Copy';
-            $url = route('article.drafted');
-        }
-        $article->save();
-        
-        Session::flash('success', $message); 
+    public function store(ArticleRequest $request, Article $article) {
+        $url = $this->save($request, $article);
         return redirect($url);
     }
 
     public function update(ArticleRequest $request, Article $article) {
-        $article->title = $request['title'];
-        $article->user_id = Auth::id();
-        $article->description = $request['description'];
-        
-        if ($request->has('publish')) {
-            $article->is_published = true;
-            $message = 'Published Successfully';
-            $url = route('article.published');
-        } else {
-            $article->is_published = false;
-            $message = 'Saved as a Draft Copy';
-            $url = route('article.drafted');
-        }
-        $article->save();
-        
-        Session::flash('success', $message); 
+        $url = $this->save($request, $article);
         return redirect($url);
     }
 
@@ -89,6 +56,27 @@ class ArticleController extends Controller
         Session::flash('success', 'Article Deleted');
 
         return redirect()->back();
+    }
+
+    private function save($request,  $article) {
+        $article->title         = $request['title'];
+        $article->user_id       = Auth::id();
+        $article->description   = $request['description'];
+        
+        if ($request->has('publish')) {
+            $article->is_published  = true;
+            $message                = 'Published Successfully';
+            $url                    = route('article.published');
+        } else {
+            $article->is_published  = false;
+            $message                = 'Saved as a Draft Copy';
+            $url                    = route('article.drafted');
+        }
+
+        $article->save();
+        Session::flash('success', $message);
+        
+        return $url;
     }
 
     // Ajax
