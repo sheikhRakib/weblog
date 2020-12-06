@@ -5,9 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Session;
-use Spatie\Permission\Models\Permission;
-use Spatie\Permission\PermissionRegistrar;
 
 class RolesAndPermissionsController extends Controller
 {
@@ -29,7 +26,7 @@ class RolesAndPermissionsController extends Controller
         $data['permissions'] = $this->permissions;
         $data['users'] = $this->users;
 
-        return view('backend.r&p.rolesAndPermissions', $data);        
+        return view('backend.management.rolesAndPermissions', $data);        
     }
 
 
@@ -40,8 +37,12 @@ class RolesAndPermissionsController extends Controller
         if(!$user) abort(404);
 
         if($request['role']) {
+            if( $user->hasRole($request['role']) ) {
+                $user->removeRole($request['role']);
+            } else {
+                $user->assignRole($request['role']);
+            }
             $user->syncPermissions();
-            $user->syncRoles($request['role']);
         } 
         
         if($request['permission']){
@@ -63,7 +64,17 @@ class RolesAndPermissionsController extends Controller
     {
         $user = User::where('username', $request['username'])->first();
         $roles = $user->getRoleNames();
-        $userPermissions = $user->getAllPermissions();
+        
+        $dp = $user->getDirectPermissions()->map(function($permission){
+            $permission->level = "Direct";
+            return $permission;
+        });
+        $rp = $user->getPermissionsViaRoles()->map(function($permission){
+            $permission->level = "via Role";
+            return $permission;
+        });
+        
+        $userPermissions = $dp->merge($rp);
         
         return response()->json([
             'user' => $user,

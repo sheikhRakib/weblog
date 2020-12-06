@@ -58,7 +58,7 @@
 
 <div class="row">
     <div class="col-12">
-        <x-collapsibleCard title="Rules to change Roles/Permissions">
+        <x-collapsibleCard title="Rules to change Roles/Permissions" collapse="true">
             <ul class="list-group list-group-flush">
                 <li class="list-group-item">If role is changed then only default permissions for that role will remain. Other permissions wiill removed for that user.</li>
                 <li class="list-group-item">No permissions that came via a role can be revoked. Only Directly assigned permissions can be revoked.</li>
@@ -86,7 +86,6 @@
                     </div>
 
                     @can('modify roles')
-
                     {{-- Assign/Revoke Roles --}}
                     <div class="form-group mt-4">
                         <div class="form-label bg-info rounded-top px-2">Assign/Revoke Roles</div>
@@ -223,7 +222,7 @@
                         $("#permissions").html("--")
                     }
                     $.each(data.userPermissions, function (index, permission) {
-                        $("#permissions").append(permission.name + "<br>")
+                        $("#permissions").append(permission.name +" ("+permission.level+")" + "<br>")
                     })
                 },
                 error: function (data, textStatus, errorThrown) {

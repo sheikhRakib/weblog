@@ -7,6 +7,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProfileEditController;
 use App\Http\Controllers\RolesAndPermissionsController;
 use App\Http\Controllers\ShoutBoxController;
+use App\Http\Controllers\UserManagementController;
 use Illuminate\Support\Facades\Route;
 
 // Frontend Routes
@@ -63,12 +64,10 @@ Route::get('/r&p', [RolesAndPermissionsController::class, 'rolesAndPermissions']
 ->name('rolesAndPermissions')
 ->middleware('can:access roles & permissions');
 
-// Route::group(['prefix' => 'r&p', 'as'=>'r&p.'], function () {
-//     Route::get('/permissions', [RolesAndPermissionsController::class, 'permissions'])->name('permissions');
-//     Route::get('/assign', [RolesAndPermissionsController::class, 'assignPermissions'])->name('assignPermissions');
 
-
-// });
+Route::get('/usermanagement', [UserManagementController::class, 'index'])
+->name('usermanagement')
+->middleware('can:access user section');
 
 
 

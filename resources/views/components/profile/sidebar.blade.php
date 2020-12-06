@@ -61,11 +61,22 @@
                 @endcan
                 @can('access roles & permissions')
                 <!-- Roles and Permissions -->
-                <li class="nav-header">MANAGEMENT</li>
+                <li class="nav-header">ACCESS MANAGER</li>
                 <li class="nav-item">
                     <a href="{{ Route('rolesAndPermissions') }}" class="nav-link">
                         <i class="nav-icon fas fa-terminal"></i>
                         <p>Roles & Permissions</p>
+                    </a>
+                </li>
+                @endcan
+
+                @can('access user section')
+                <!-- User Section -->
+                <li class="nav-header">MANAGEMENT</li>
+                <li class="nav-item">
+                    <a href="{{ Route('usermanagement') }}" class="nav-link">
+                        <i class="nav-icon fas fa-user-cog"></i>
+                        <p>User Management</p>
                     </a>
                 </li>
                 @endcan

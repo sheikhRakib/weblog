@@ -30,6 +30,10 @@ class User extends Authenticatable
         'dob' => 'datetime',
     ];
 
+    public function articles() {
+        return $this->hasMany('App\Models\Article', 'user_id');
+    }
+
     public function setNameAttribute($value) 
     {   
         $value = C_Data::refine($value);

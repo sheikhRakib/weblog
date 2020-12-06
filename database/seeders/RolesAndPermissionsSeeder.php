@@ -28,7 +28,6 @@ class RolesAndPermissionsSeeder extends Seeder
             'publish articles',
 
             'access roles & permissions',
-            // yet to done
             'modify roles',
             'modify permissions',
 
@@ -39,32 +38,39 @@ class RolesAndPermissionsSeeder extends Seeder
         foreach($permissions as $permission) Permission::create(['name' => $permission]);
         // =======================================================================
         
-        $system     = Role::create(['name' => 'system']);
         $admin      = Role::create(['name' => 'admin']);
         $moderator  = Role::create(['name' => 'moderator']);
         $user       = Role::create(['name' => 'user']);
+
+        $social     = Role::create(['name' => 'social']);
+        $writer     = Role::create(['name' => 'writer']);
+        $watcher     = Role::create(['name' => 'watcher']);
+
         // =======================================================================
 
-        $ap = [
-            'edit profile',
-            'access shoutbox',
-            'access articles',
-            'manage articles',
-            'access roles & permissions',
-            'modify roles',
-            'modify permissions',
+        $user_permissions = [
+            'edit profile',            
         ];
-        $mp = [
-            'edit profile',
-            'access shoutbox',
+        $moderator_permissions = [
             'access articles',
             'manage articles',
             'delete articles',
             'access roles & permissions',
         ];
-        $up = [
-            'edit profile',
+        $admin_permissions = [
+            'access articles',
+            'manage articles',
+            'access roles & permissions',
+            'modify roles',
+            'modify permissions',
+            'access user section',
+            'delete user',
+        ];
+
+        $social_permissions = [
             'access shoutbox',
+        ];
+        $writer_permissions = [
             'access articles',
             'view own articles',
             'write articles',
@@ -72,9 +78,13 @@ class RolesAndPermissionsSeeder extends Seeder
             'delete articles',
             'publish articles',
         ];
+        
 
-        $admin->syncPermissions($ap);
-        $moderator->syncPermissions($mp);
-        $user->syncPermissions($up);
+        $user->syncPermissions($user_permissions);
+        $moderator->syncPermissions($moderator_permissions);
+        $admin->syncPermissions($admin_permissions);
+
+        $social->syncPermissions($social_permissions);
+        $writer->syncPermissions($writer_permissions);
     }
 }

@@ -27,7 +27,7 @@ class DefaultUserSeeder extends Seeder
             'email'     => 'system@mail.io',
             'password'  => Hash::make('12345'),
         ]);
-        $system->assignRole("system");
+        $system->assignRole("watcher");
 
         $admin = User::create([
             'name'      => 'weblog admin',

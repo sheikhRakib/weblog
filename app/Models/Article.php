@@ -22,12 +22,11 @@ class Article extends Model
     }
 
     public function author() {
-        return $this->belongsTo('App\Models\User', 'user_id');
+        return $this->belongsTo(User::class, 'user_id');
     }
 
-    public function comments()
-    {
-        return $this->hasMany('App\Models\Comment', 'article_id');
+    public function comments() {
+        return $this->hasMany(Comment::class, 'article_id');
     }
 
     public function getLeadAttribute() {

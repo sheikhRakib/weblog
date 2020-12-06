@@ -16,6 +16,6 @@ class ShoutBox extends Model
     ];
 
     public function sender() {
-        return $this->belongsTo('App\Models\User', 'sender_id');
+        return $this->belongsTo(User::class, 'sender_id');
     }
 }
